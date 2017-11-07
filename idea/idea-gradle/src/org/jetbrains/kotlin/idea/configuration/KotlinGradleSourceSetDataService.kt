@@ -214,7 +214,7 @@ fun configureFacetByGradleModule(
     }
 
     with(kotlinFacet.configuration.settings) {
-        implementedModuleName = (sourceSetNode ?: moduleNode).implementedModuleName
+        implementedModuleName = moduleNode.implementedModuleName
         productionOutputPath = getExplicitOutputPath(moduleNode, platformKind, "main")
         testOutputPath = getExplicitOutputPath(moduleNode, platformKind, "test")
     }
