@@ -4,17 +4,19 @@ import org.junit.*
 import kotlin.test.*
 
 class JUnitContributor : AsserterContributor {
-    override fun contribute(): Asserter? {
-        for (stackFrame in currentStackTrace()) {
-            @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
-            val className = stackFrame.className as java.lang.String
-
-            if (className.startsWith("org.junit.") || className.startsWith("junit.")) {
-                return JUnitAsserter
-            }
+    private val hasJUnitInClassPath by lazy {
+        try {
+            executeAssert()
+            true
+        } catch (_: Throwable) {
+            false
         }
+    }
 
-        return null
+    private fun executeAssert() = org.junit.Assert.assertTrue(true)
+
+    override fun contribute(): Asserter? {
+        return if (hasJUnitInClassPath) JUnitAsserter else null
     }
 }
 

@@ -9,16 +9,19 @@ import org.testng.*
 import kotlin.test.*
 
 class TestNGContributor : AsserterContributor {
-    override fun contribute(): Asserter? {
-        for (stackFrame in currentStackTrace()) {
-            val className = stackFrame.className
-
-            if (className.startsWith("org.testng.") || className.startsWith("testng.")) {
-                return TestNGAsserter
-            }
+    private val hasTestNGInClassPath by lazy {
+        try {
+            executeAssert()
+            true
+        } catch (_: Throwable) {
+            false
         }
+    }
 
-        return null
+    private fun executeAssert() = org.testng.Assert.assertTrue(true)
+
+    override fun contribute(): Asserter? {
+        return if (hasTestNGInClassPath) TestNGAsserter else null
     }
 }
 
