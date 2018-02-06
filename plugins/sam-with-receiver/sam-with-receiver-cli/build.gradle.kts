@@ -4,8 +4,6 @@ description = "Kotlin SamWithReceiver Compiler Plugin"
 apply { plugin("kotlin") }
 
 dependencies {
-    testRuntime(intellijDep())
-
     compileOnly(project(":compiler:frontend"))
     compileOnly(project(":compiler:frontend.java"))
     compileOnly(project(":compiler:plugin-api"))
@@ -48,4 +46,7 @@ ideaPlugin {
 projectTest {
     dependsOn(":prepare:mock-runtime-for-test:dist")
     workingDir = rootDir
+    doFirst {
+        systemProperty("idea.home.path", intellijRootDir().canonicalPath)
+    }
 }

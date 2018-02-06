@@ -4,8 +4,6 @@ description = "Kotlin NoArg Compiler Plugin"
 apply { plugin("kotlin") }
 
 dependencies {
-    testRuntime(intellijDep())
-
     compileOnly(project(":compiler:frontend"))
     compileOnly(project(":compiler:frontend.java"))
     compileOnly(project(":compiler:backend"))
@@ -43,4 +41,7 @@ ideaPlugin {
 
 projectTest {
     workingDir = rootDir
+    doFirst {
+        systemProperty("idea.home.path", intellijRootDir().canonicalPath)
+    }
 }
